@@ -1,25 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
+import List from "./pages/List/List";
+import Single from "./pages/Single/Single";
+import New from "./pages/New/New";
+import "./App.scss";
+import "./style/dark.scss";
+import { userInputs, productInputs } from "./formSource";
+import { useContext } from "react";
+import { DarkModeContext } from "./context/darkModeContext";
 
-function App() {
+const App = () => {
+  const { darkMode } = useContext(DarkModeContext);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={darkMode ? "app dark" : "app"}>
+      <div className="app__container">
+        <div className="app__inner">
+          <BrowserRouter>
+            <Routes>
+              <Route path="/">
+                <Route index element={<Home />} />
+                <Route path="login" element={<Login />} />
+                <Route path="users">
+                  <Route index element={<List />} />
+                  <Route path=":userId" element={<Single />} />
+                  <Route
+                    path="new"
+                    element={<New inputs={userInputs} title="Add New User" />}
+                  />
+                </Route>
+                <Route path="products">
+                  <Route index element={<List />} />
+                  <Route path=":productId" element={<Single />} />
+                  <Route
+                    path="new"
+                    element={
+                      <New inputs={productInputs} title="Add New Product" />
+                    }
+                  />
+                </Route>
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
